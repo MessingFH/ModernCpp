@@ -16,7 +16,7 @@ using namespace std;
 class String
 {
     private:
-
+        char* string;
 
     public:
         // ctor
