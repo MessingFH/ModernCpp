@@ -13,16 +13,16 @@ using namespace std;
 
 void print_string(String s)
 {
-s.print();
-s.append("234");
-s.print();
+    s.print();
+    s.append("234");
+    s.print();
 }
 
 int main()
 {
-String test("test");
-print_string(test);
-test.print();
-test.append("xyz");
-test.print();
+    String test("test");
+    //print_string(test);
+    test.clear();
+    test.append("123");
+    test.print();
 }

@@ -18,7 +18,7 @@ String::String(const char* data)
         size_t length = 0;
         if(data != NULL){
                 while (data[length] != '\0') length++;
-        }
+        } 
         string = (char*)malloc(length);
 
         for(int i = 0; i < length; i++)
@@ -31,7 +31,7 @@ String::String(const char* data)
 String::~String()
 {
         clear();
-        string = NULL;
+        delete[] string;
 }
 
 String::String(const String& rhs) 
@@ -54,14 +54,8 @@ void String::append(const char* data)
                 while (data[data_length] != '\0') data_length++;
         }
 
+        realloc(string, this_length+data_length);
         
-        if(string == ""){
-                string = (char*)malloc(this_length+data_length);
-        }
-        else
-        {
-                realloc(string, this_length+data_length);
-        }
         for(int i = 0; i < data_length; i++)
         {
                 string[this_length+i] = data[i];
@@ -101,8 +95,9 @@ void String::print()
 
 void String::clear()
 {
+        string[0] = '\0';
         free(string);
-        string = "";
+        //string = "";
         //string = "";
 }
 
