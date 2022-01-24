@@ -1,5 +1,5 @@
 //main.cpp
-
+#include <iostream>
 #include "string.cpp"
 
 // Autor(en): Daniel Mollenhauer, Bjarne Messing, Jonas Schwerthelm
@@ -10,13 +10,19 @@
 
 using namespace std;
 
+
+void print_string(String s)
+{
+s.print();
+s.append("234");
+s.print();
+}
+
 int main()
 {
-    String s("test1");
-    s.clear();
-    
-    s.append("test2");
-
-    char* test = s.data();
-    std::cout << test[1];
+String test("test");
+print_string(test);
+test.print();
+test.append("xyz");
+test.print();
 }

@@ -15,14 +15,17 @@ String::String()
 
 String::String(const char* data)
 {
-        size_t length = sizeof(data)/sizeof(char);
-        string = (char*)malloc(length*sizeof(char)+1);
+        size_t length = 0;
+        if(data != NULL){
+                while (data[length] != '\0') length++;
+        }
+        string = (char*)malloc(length);
 
-        for(int i = 0; i <= length; i++)
+        for(int i = 0; i < length; i++)
         {
                 string[i] = data[i];
         }
-        string[length+1] = '\0';
+        string[length] = '\0';
 }     
 
 String::~String()
@@ -31,21 +34,34 @@ String::~String()
         string = NULL;
 }
 
+String::String(const String& rhs) 
+         : string{ rhs.string } 
+{
+        std::cout << "User defined copy constructor invoked.";
+}
+
+
 void String::append(const char* data)
 {
         size_t this_length = 0;
-        if(string != nullptr)
+        if(string != NULL)
         {
                 while (string[this_length] != '\0') this_length++;
         }
         
         size_t data_length = 0;
-        if(data != nullptr){
+        if(data != NULL){
                 while (data[data_length] != '\0') data_length++;
         }
 
-        string = (char*)realloc(string, this_length+data_length);
-
+        
+        if(string == ""){
+                string = (char*)malloc(this_length+data_length);
+        }
+        else
+        {
+                realloc(string, this_length+data_length);
+        }
         for(int i = 0; i < data_length; i++)
         {
                 string[this_length+i] = data[i];

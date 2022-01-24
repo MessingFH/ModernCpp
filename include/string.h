@@ -24,6 +24,7 @@ class String
         String(const char* data);
         // dtor
         ~String();
+        String(const String& rhs);
 
         // getter/setter methods
         void append(const char* data);
