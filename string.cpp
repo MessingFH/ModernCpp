@@ -27,41 +27,67 @@ String::String(const char* data)
 
 String::~String()
 {
-
+        clear();
+        string = NULL;
 }
 
 void String::append(const char* data)
 {
-        size_t this_length = sizeof(this)/sizeof(char);
-        size_t data_length = sizeof(data)/sizeof(char);
-        realloc(this, sizeof(char)*(this_length+data_length));
+        size_t this_length = 0;
+        if(string != nullptr)
+        {
+                while (string[this_length] != '\0') this_length++;
+        }
         
+        size_t data_length = 0;
+        if(data != nullptr){
+                while (data[data_length] != '\0') data_length++;
+        }
+
+        string = (char*)realloc(string, this_length+data_length);
+
         for(int i = 0; i < data_length; i++)
         {
                 string[this_length+i] = data[i];
         }
         string[this_length+data_length] = '\0';
+        
 }
 
 char* String::data()
 {
-
+        if(string == nullptr)
+        {
+                throw std::invalid_argument("String-Memberfunction data returned Nullptr");
+        }
+        return string;
 }
 
 int String::find(char c)
 {
+        size_t this_length = 0;
+        while (string[this_length] != '\0') this_length++;
 
+        for(int i = 0; i < this_length; i++)
+        {
+                if(string[i] == c) 
+                {
+                        return i;
+                }
+        }
+        return -1;
 }
 
 void String::print()
 {
-        std::cout << this << std::endl;
+        std::cout << string << std::endl;
 }
 
 void String::clear()
 {
-        free(this);
+        free(string);
         string = "";
+        //string = "";
 }
 
 

@@ -1,6 +1,6 @@
 //main.cpp
 
-#include "include/string.h"
+#include "string.cpp"
 
 // Autor(en): Daniel Mollenhauer, Bjarne Messing, Jonas Schwerthelm
 // Datum: 23.01.2022
@@ -12,6 +12,11 @@ using namespace std;
 
 int main()
 {
-    String s();
-    std::cout << s << std::endl;
+    String s("test1");
+    s.clear();
+    
+    s.append("test2");
+
+    char* test = s.data();
+    std::cout << test[1];
 }
