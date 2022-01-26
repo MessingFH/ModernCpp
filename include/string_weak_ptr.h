@@ -10,6 +10,7 @@
 // 
 
 #include <iostream>
+#include "string_shared_ptr.h"
 
 using namespace std;
 
@@ -26,7 +27,7 @@ class String_weak_ptr
         // dtor
         ~String_weak_ptr();
         //cpy ctor
-
+        String_weak_ptr(const String_weak_ptr& rhs);
 
         //methods
         String_shared_ptr lock();                

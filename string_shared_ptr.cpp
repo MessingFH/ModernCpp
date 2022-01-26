@@ -13,116 +13,71 @@
 /* Constructor
  * 
  */
-String::String()
+String_shared_ptr::String_shared_ptr()
 {
-        string = "";    //string is initialized empty
+        adress = nullptr;    //pointer is initialized empty
+        refcount = new int;
+        *refcount = 1;
 }
 /* Overloaded Constructor
  * 
  */
-String::String(const char* data)
+String_shared_ptr::String_shared_ptr(String* data)
 {
-        size_t length = 0;
-        if(data != NULL){
-                while (data[length] != '\0') length++;          //calculate length of given data
-        } 
-        string = (char*)malloc(length);         //allocate memory
-
-        for(int i = 0; i < length; i++)
-        {
-                string[i] = data[i];            //fill allocated memory
-        }
-        string[length] = '\0';          //add string termination
+        adress = data;
+        refcount = new int;
+        *refcount = 1;
 }
 
 /* Destructor
  * 
  */
-String::~String()
+String_shared_ptr::~String_shared_ptr()
 {
-        clear();
-        delete[] string;
+        std::cout << "User defined shared destructor invoked." << std::endl; //Used as Debug for 2 c)
+        if(*refcount <= 1)
+        {
+                delete[] refcount;
+                delete[] adress;
+        }
+        else
+        {
+                *refcount -= 1;
+                //only delete this pointer
+        }
 }
 /* Copy Constructor
  * 
  */
-String::String(const String& rhs) 
-         : string{ rhs.string } 
+String_shared_ptr::String_shared_ptr(const String_shared_ptr& rhs) 
+         : adress{ rhs.adress }, refcount{ rhs.refcount } 
 {
-        std::cout << "User defined copy constructor invoked."; //Used as Debug for 2 c)
+        *rhs.refcount += 1;
+
+        std::cout << "User defined shared copy constructor invoked." << std::endl; //Used as Debug for 2 c)
 }
 
-/* Function to append further chars to the string
- * 
- */
-void String::append(const char* data)
+int String_shared_ptr::getRef()
 {
-        size_t this_length = 0;
-        if(string != NULL)
-        {
-                while (string[this_length] != '\0') this_length++;      //calculate length of current string
-        }
-        
-        size_t data_length = 0;
-        if(data != NULL){
-                while (data[data_length] != '\0') data_length++;      //calculate length of given data
-        }
-
-        realloc(string, this_length+data_length);             //reallocate memory (in case of nullptr, behaves like malloc)
-        
-        for(int i = 0; i < data_length; i++)
-        {
-                string[this_length+i] = data[i];              //fill the reallocated memory
-        }
-        string[this_length+data_length] = '\0';               //terminate string
-        
+        return *refcount;
 }
 
 /* Function to return the current string data as pointer
  * 
  */
-char* String::data()
+void String_shared_ptr::reset()
 {
-        if(string == nullptr)
-        {
-                throw std::invalid_argument("String-Memberfunction data returned Nullptr");
+        if(*refcount <= 1)
+        {       
+                delete[] refcount;
+                delete[] adress;
+                adress = nullptr;
         }
-        return string;
-}
-
-/* Function to find first instance of char c in string
- * 
- */
-int String::find(char c)
-{
-        size_t this_length = 0;
-        while (string[this_length] != '\0') this_length++;
-
-        for(int i = 0; i < this_length; i++)
+        else
         {
-                if(string[i] == c) 
-                {
-                        return i;
-                }
+                *refcount -= 1;
+                adress = nullptr;
         }
-        return -1;      //-1 as feedback "not found"
-}
-
-/* Function to print the current string
- * 
- */
-void String::print()
-{
-        std::cout << string << std::endl;
-}
-
-/* Function to clear the string and free memory
- * 
- */
-void String::clear()
-{
-        string[0] = '\0';
-        free(string);
 }
 
 

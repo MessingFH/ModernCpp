@@ -17,24 +17,26 @@ class String_shared_ptr
 {
     private:
         String* adress;
+        int* refcount;
 
     public:
         // ctor
         String_shared_ptr();
-        String_shared_ptr(const String* data);
+        String_shared_ptr(String* data);
         // dtor
         ~String_shared_ptr();
         //cpy ctor
         String_shared_ptr(const String_shared_ptr& rhs);
 
         //methods
+        int getRef();
         void reset();
         /* Funtion to associate the -> operator with
         * 
         * Return: 
         */
-        String operator -> () const {
-            return *adress;
+        String* operator -> () const {
+            return adress;
         }
         
 };

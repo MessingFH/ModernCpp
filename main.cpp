@@ -16,19 +16,26 @@
 
 using namespace std;
 
-
-void print_string(String s)
+void doSomething (const String_shared_ptr& t)
 {
-    s.print();
-    s.append("234");
-    s.print();
+    t.~String_shared_ptr();
 }
+
 
 int main()
 {
     String test("test");
-    //print_string(test);
-    test.clear();
-    test.append("123");
-    test.print();
+    String_shared_ptr sharedPtr(&test);
+    sharedPtr->print();
+    std::cout << "number " << sharedPtr.getRef() << std::endl;
+    String_shared_ptr sharedPtr1(sharedPtr);
+    std::cout << "number " << sharedPtr1.getRef() << std::endl;
+    sharedPtr1->print();
+    doSomething(sharedPtr);
+    std::cout << "number " << sharedPtr1.getRef() << std::endl;
+    sharedPtr->print();
+    sharedPtr1->print();
+    
+    String_weak_ptr weakPtr(sharedPtr);
+    weakPtr.lock();
 }
