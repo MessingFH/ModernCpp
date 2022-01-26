@@ -1,4 +1,4 @@
-//car.h
+//string.h
 
 #ifndef __STRING__
 #define __STRING__
@@ -24,9 +24,10 @@ class String
         String(const char* data);
         // dtor
         ~String();
+        //cpy ctor
         String(const String& rhs);
 
-        // getter/setter methods
+        //methods
         void append(const char* data);
         char* data();
         int find(char c);
