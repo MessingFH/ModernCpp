@@ -29,7 +29,10 @@ class String_shared_ptr
         String_shared_ptr(const String_shared_ptr& rhs);
 
         //methods
-        int getRef();
+        
+        String* getAdress() const;
+        int* getRef() const;
+        void setRef(int* Ref);
         void reset();
         /* Funtion to associate the -> operator with
         * 

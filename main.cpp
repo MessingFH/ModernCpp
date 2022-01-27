@@ -18,7 +18,7 @@ using namespace std;
 
 void doSomething (const String_shared_ptr& t)
 {
-    t.~String_shared_ptr();
+    
 }
 
 
@@ -26,16 +26,5 @@ int main()
 {
     String test("test");
     String_shared_ptr sharedPtr(&test);
-    sharedPtr->print();
-    std::cout << "number " << sharedPtr.getRef() << std::endl;
-    String_shared_ptr sharedPtr1(sharedPtr);
-    std::cout << "number " << sharedPtr1.getRef() << std::endl;
-    sharedPtr1->print();
-    doSomething(sharedPtr);
-    std::cout << "number " << sharedPtr1.getRef() << std::endl;
-    sharedPtr->print();
-    sharedPtr1->print();
-    
-    String_weak_ptr weakPtr(sharedPtr);
-    weakPtr.lock();
+    doSomething (sharedPtr);
 }
