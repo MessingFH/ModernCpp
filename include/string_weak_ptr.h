@@ -18,7 +18,7 @@ using namespace std;
 class String_weak_ptr
 {
     private:
-        String* adress;
+        String* address;
         int* refcount;
         int* weakcount;
 

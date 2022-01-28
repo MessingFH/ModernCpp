@@ -15,7 +15,7 @@
  */
 String_weak_ptr::String_weak_ptr()
 {
-        adress = nullptr;    //string is initialized empty
+        address = nullptr;    //Pointer is initialized empty
         refcount = new int(0);
         weakcount = new int(1);
 }
@@ -24,7 +24,7 @@ String_weak_ptr::String_weak_ptr()
  */
 String_weak_ptr::String_weak_ptr(const String_shared_ptr& data)
 {
-        adress = data.getAdress();
+        address = data.getaddress();
         refcount = data.getRef();
         weakcount = new int(1);
 }
@@ -37,44 +37,47 @@ String_weak_ptr::~String_weak_ptr()
         if(*weakcount <= 1)
         {
                 delete [] weakcount;
-                adress = nullptr;
+                address = nullptr;
                 weakcount = nullptr;
         }
         else
         {
                 *weakcount--;
-                adress = nullptr;
+                address = nullptr;
         }
-        std::cout << "Weak_ptr destructor called" << std::endl;        
+        std::cout << "Weak_ptr destructor called" << std::endl;        //Used as Debug
 }
 /* Copy Constructor
  * 
  */
 String_weak_ptr::String_weak_ptr(const String_weak_ptr& rhs) 
-         : adress{ rhs.adress } 
+         : address{ rhs.address } 
 {
         *rhs.weakcount += 1;
 
-        std::cout << "User defined weak copy constructor invoked."; //Used as Debug for 2 c)
+        std::cout << "User defined weak copy constructor invoked."; //Used as Debug
 }
 
+/* Function to check the status of the weak_ptr
+ * 
+ */
 bool String_weak_ptr::expired() const
 {
-        if(adress == nullptr || *refcount == 0)
+        if(address == nullptr || *refcount == 0)
         {
                 return true;
         }
         return false;
 }
 
-/* Function to append further chars to the string
- * 
+/* Function to lock the weak_ptr, by returning a shared_ptr
+ * depending on the state of expired()
  */
 String_shared_ptr String_weak_ptr::lock()
 {
         if(expired() == false)
         {
-                String_shared_ptr x(adress);
+                String_shared_ptr x(address);
                 x.setRef(refcount);
                 return x;
         }

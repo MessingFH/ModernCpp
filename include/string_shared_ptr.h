@@ -16,7 +16,7 @@ using namespace std;
 class String_shared_ptr
 {
     private:
-        String* adress;
+        String* address;
         int* refcount;
 
     public:
@@ -30,16 +30,16 @@ class String_shared_ptr
 
         //methods
         
-        String* getAdress() const;
+        String* getaddress() const;
         int* getRef() const;
         void setRef(int* Ref);
         void reset();
-        /* Funtion to associate the -> operator with
+        /* Funtion to associate the -> operator with the dedicated String
         * 
         * Return: 
         */
         String* operator -> () const {
-            return adress;
+            return address;
         }
         
 };

@@ -15,7 +15,7 @@
  */
 String_shared_ptr::String_shared_ptr()
 {
-        adress = nullptr;    //pointer is initialized empty
+        address = nullptr;    //pointer is initialized empty
         refcount = new int(1);       
 }
 /* Overloaded Constructor
@@ -23,7 +23,7 @@ String_shared_ptr::String_shared_ptr()
  */
 String_shared_ptr::String_shared_ptr(String* data)
 {
-        adress = data;
+        address = data;
         refcount = new int(1);
 }
 
@@ -32,18 +32,18 @@ String_shared_ptr::String_shared_ptr(String* data)
  */
 String_shared_ptr::~String_shared_ptr()
 {
-        std::cout << "User defined shared destructor invoked."<< *refcount << std::endl; //Used as Debug for 2 c)
+        std::cout << "User defined shared destructor invoked."<< *refcount << std::endl; //Used as Debug
         if(*refcount <= 1)
         {
                 delete refcount;
-                (*adress).clear();
+                (*address).clear();
                 refcount = nullptr;
-                adress = nullptr;
+                address = nullptr;
         }
         else
         {
                 *refcount--;
-                adress = nullptr;
+                address = nullptr;
                 //only delete this pointer
         }
 }
@@ -51,42 +51,51 @@ String_shared_ptr::~String_shared_ptr()
  * 
  */
 String_shared_ptr::String_shared_ptr(const String_shared_ptr& rhs) 
-         : adress{ rhs.adress }, refcount{ rhs.refcount } 
+         : address{ rhs.address }, refcount{ rhs.refcount } 
 {
         *rhs.refcount += 1;
 
-        std::cout << "User defined shared copy constructor invoked." << std::endl; //Used as Debug for 2 c)
+        std::cout << "User defined shared copy constructor invoked." << std::endl; //Used as Debug
 }
 
-String* String_shared_ptr::getAdress() const
+/* Function to get Address
+ * 
+ */
+String* String_shared_ptr::getaddress() const
 {
-        return adress;
+        return address;
 }
 
+/* Function to get Refcount
+ * 
+ */
 int* String_shared_ptr::getRef() const
 {
         return refcount;
 }
 
+/* Function to set Refcount, used for creation in weak_ptr.lock()
+ * 
+ */
 void String_shared_ptr::setRef(int* Ref) 
 {
         refcount = Ref;
 }
 
-/* Function to return the current string data as pointer
- * 
+/* Function to reset the shared_ptr
+ * while checking for Refcount
  */
 void String_shared_ptr::reset()
 {
         if(*refcount <= 1)
         {       
-                delete[] adress;
-                adress = nullptr;
+                delete[] address;
+                address = nullptr;
         }
         else
         {
                 *refcount--;
-                adress = nullptr;
+                address = nullptr;
         }
 }
 
