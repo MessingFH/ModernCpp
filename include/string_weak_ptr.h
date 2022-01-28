@@ -36,21 +36,4 @@ class String_weak_ptr
         String_shared_ptr lock();                
 };
 
-/*
-Wir habens fast geschafft produktiv anzufangen zu arbeiten
-und Jonas so 
-"alter daniel was geht eigentlcih mit dem fußball ab?"
--Bochum
--Karlsruhe
--Pauli 
--Gladbach
--Saarbrücken (sad)
--Holstein Kiel
--Sportdirektor
--Hannover
-~Dörtmund
--Hamburg
--Läbpzsch
--Freiburch
-*/
 #endif

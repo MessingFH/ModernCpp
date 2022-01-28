@@ -18,6 +18,7 @@ String_shared_ptr::String_shared_ptr()
         address = nullptr;    //pointer is initialized empty
         refcount = new int(1);       
 }
+
 /* Overloaded Constructor
  * 
  */
@@ -47,6 +48,7 @@ String_shared_ptr::~String_shared_ptr()
                 //only delete this pointer
         }
 }
+
 /* Copy Constructor
  * 
  */
@@ -98,5 +100,3 @@ void String_shared_ptr::reset()
                 address = nullptr;
         }
 }
-
-

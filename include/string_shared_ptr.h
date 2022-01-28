@@ -44,5 +44,4 @@ class String_shared_ptr
         
 };
 
-
 #endif

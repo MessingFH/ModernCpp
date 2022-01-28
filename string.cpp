@@ -17,6 +17,7 @@ String::String()
 {
         string = "";    //string is initialized empty
 }
+
 /* Overloaded Constructor
  * 
  */

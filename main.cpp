@@ -1,11 +1,9 @@
 //main.cpp
 #include <iostream>
-#include "string.cpp"   //unexcpected include, see below
-//#include "include/string.h" <- excpected include, not working due to compiling error
 
-#include "string_shared_ptr.cpp" 
-#include "string_weak_ptr.cpp" 
-
+#include "include/string.h"
+#include "include/string_shared_ptr.h"
+#include "include/string_weak_ptr.h"
 
 // Autor(en): Daniel Mollenhauer, Bjarne Messing, Jonas Schwerthelm
 // Datum: 23.01.2022
@@ -13,14 +11,12 @@
 // Copyright: Bjarne Messing, Daniel Mollenhauer, Jonas Schwerthelm
 // main.cpp for debuging 2 c)
 
-
 using namespace std;
 
 void doSomething (const String_shared_ptr& t)
 {
     
 }
-
 
 int main()
 {
