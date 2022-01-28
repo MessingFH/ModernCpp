@@ -19,6 +19,7 @@ String_weak_ptr::String_weak_ptr()
         refcount = new int(0);
         weakcount = new int(1);
 }
+
 /* Overloaded Constructor
  * 
  */
@@ -47,6 +48,7 @@ String_weak_ptr::~String_weak_ptr()
         }
         std::cout << "Weak_ptr destructor called" << std::endl;        //Used as Debug
 }
+
 /* Copy Constructor
  * 
  */
@@ -87,5 +89,3 @@ String_shared_ptr String_weak_ptr::lock()
                 return x;
         }
 }
-
-
