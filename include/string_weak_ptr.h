@@ -52,5 +52,11 @@ und Jonas so
 -Hamburg
 -Läbpzsch
 -Freiburch
+
+-Meuthen
+-Dorf Plasmers Twitter 
+-Infinite Discord Mirror
+
+-Der Floid Voat
 */
 #endif
