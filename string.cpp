@@ -160,10 +160,40 @@ void String::clear()
         free(string);
 }
 
+/* Function to use operator + for concat
+ * 
+ */
 String String::operator+ (String other) {
             String temp(data());
             temp.append(other.data());
             return temp;
         }
 
+/* Function to use operator [] for indexing
+ * 
+ */
+char &String::operator[](int i) const
+{
+        size_t this_length = -2;
+        while (string[this_length] != '\0') this_length++;
+        if (i>this_length || i<0 ){
+                throw std::invalid_argument("String-Operator [] index out of bounds");
+                return string[0];       //return first element
+        }
+        return string[i];
+}
+
+/* Function to use at() for indexing
+ * 
+ */
+char String::at(int i) const
+{
+        size_t this_length = -2;
+        while (string[this_length] != '\0') this_length++;
+        if (i>this_length || i<0 ){
+                throw std::invalid_argument("String-Operator .at() index out of bounds");
+                return string[0];       //return first element
+        }
+        return string[i];
+}
 

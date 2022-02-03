@@ -23,10 +23,11 @@ String test2 = test; // must copy the string
 test.clear();
 test2.print(); // must print "a"
 String test3(std::move(test2));
-*/
-String r = ("b" + "c");
-r.print();
 String result = (String() + "b" + "c");
 result.print();
+*/
+String x("");
+std::cout << x.at(1) << x[0]<<std::endl;
+
 
 }
