@@ -13,14 +13,20 @@
 
 using namespace std;
 
-void doSomething (const String_shared_ptr& t)
-{
-    
-}
+int main () {
+/*    
+String test;
+test.find('a');
+test.print();
+test.append("a");
+String test2 = test; // must copy the string
+test.clear();
+test2.print(); // must print "a"
+String test3(std::move(test2));
+*/
+String r = ("b" + "c");
+r.print();
+String result = (String() + "b" + "c");
+result.print();
 
-int main()
-{
-    String test("test");
-    String_shared_ptr sharedPtr(&test);
-    doSomething (sharedPtr);
 }

@@ -60,30 +60,6 @@ String_shared_ptr::String_shared_ptr(const String_shared_ptr& rhs)
         std::cout << "User defined shared copy constructor invoked." << std::endl; //Used as Debug
 }
 
-/* Function to get Address
- * 
- */
-String* String_shared_ptr::getaddress() const
-{
-        return address;
-}
-
-/* Function to get Refcount
- * 
- */
-int* String_shared_ptr::getRef() const
-{
-        return refcount;
-}
-
-/* Function to set Refcount, used for creation in weak_ptr.lock()
- * 
- */
-void String_shared_ptr::setRef(int* Ref) 
-{
-        refcount = Ref;
-}
-
 /* Function to reset the shared_ptr
  * while checking for Refcount
  */

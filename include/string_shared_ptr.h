@@ -10,11 +10,14 @@
 // 
 
 #include <iostream>
+
 using namespace std;
 
+class String; //für Aufgabe 2 c)
 
 class String_shared_ptr
 {
+    friend class String_weak_ptr;
     private:
         String* address;
         int* refcount;
@@ -29,11 +32,9 @@ class String_shared_ptr
         String_shared_ptr(const String_shared_ptr& rhs);
 
         //methods
-        
-        String* getaddress() const;
-        int* getRef() const;
-        void setRef(int* Ref);
+
         void reset();
+        
         /* Funtion to associate the -> operator with the dedicated String
         * 
         * Return: 

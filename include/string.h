@@ -15,6 +15,8 @@ using namespace std;
 
 class String
 {
+    //friend class shared_string_ptr;
+
     private:
         char* string;
 
@@ -26,14 +28,19 @@ class String
         ~String();
         //cpy ctor
         String(const String& rhs);
+        //move ctor
+        String(String&& other);
 
         //methods
         void append(const char* data);
         char* data();
-        int find(char c);
-        void print();
+        const char* data() const;
+        int find(char c) const;
+        void print() const;
         void clear();
-        
+        String operator+(String other);
+    	
+
 };
 
 #endif

@@ -10,13 +10,16 @@
 // 
 
 #include <iostream>
+#include "string.h"
 #include "string_shared_ptr.h"
+
 
 using namespace std;
 
 
 class String_weak_ptr
 {
+    
     private:
         String* address;
         int* refcount;
@@ -33,7 +36,7 @@ class String_weak_ptr
 
         //methods
         bool expired() const;
-        String_shared_ptr lock();                
+        String_shared_ptr lock() const;                
 };
 
 /*

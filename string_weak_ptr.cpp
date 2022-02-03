@@ -25,8 +25,8 @@ String_weak_ptr::String_weak_ptr()
  */
 String_weak_ptr::String_weak_ptr(const String_shared_ptr& data)
 {
-        address = data.getaddress();
-        refcount = data.getRef();
+        address = data.address;
+        refcount = data.refcount;
         weakcount = new int(1);
 }
 
@@ -75,12 +75,12 @@ bool String_weak_ptr::expired() const
 /* Function to lock the weak_ptr, by returning a shared_ptr
  * depending on the state of expired()
  */
-String_shared_ptr String_weak_ptr::lock()
+String_shared_ptr String_weak_ptr::lock() const
 {
         if(expired() == false)
         {
                 String_shared_ptr x(address);
-                x.setRef(refcount);
+                x.refcount = refcount;
                 return x;
         }
         else

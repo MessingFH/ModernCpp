@@ -13,9 +13,11 @@
 /* Constructor
  * 
  */
-String::String()
+String::String() : string(nullptr)
 {
-        string = "";    //string is initialized empty
+        std::cout << "User defined String constructor invoked." << std::endl; //Used as Debug
+        string = new char[1];    //string is initialized empty
+        string[0] = '\0';
 }
 
 /* Overloaded Constructor
@@ -23,6 +25,7 @@ String::String()
  */
 String::String(const char* data)
 {
+        std::cout << "User defined String-parameter constructor invoked." << std::endl; //Used as Debug
         size_t length = 0;
         if(data != NULL){
                 while (data[length] != '\0') length++;          //calculate length of given data
@@ -41,17 +44,36 @@ String::String(const char* data)
  */
 String::~String()
 {
-        clear();
-        delete[] string;
+        std::cout << "User defined String destructor invoked." << std::endl; //Used as Debug
+        if (string != nullptr)
+        {
+                clear();
+        }
+        string = nullptr;
 }
 /* Copy Constructor
  * 
  */
 String::String(const String& rhs) 
-         : string{ rhs.string } 
+         : string{ nullptr } 
 {
-        std::cout << "User defined copy constructor invoked."; //Used as Debug for 2 c)
+        size_t length = 0;
+        while (rhs.string[length] != '\0') length++;
+        string = (char*)malloc(length);
+        *string = *rhs.string;
+        std::cout << "User defined String copy constructor invoked." << std::endl; //Used as Debug for 2 c)
 }
+
+/* Move Constructor
+ * 
+ */
+String::String(String&& other) 
+         : string{ other.string } 
+{
+        std::cout << "User defined String move constructor invoked."<< std::endl; //Used as Debug for 2 c)
+        other.string = nullptr;
+}
+
 
 /* Function to append further chars to the string
  * 
@@ -91,10 +113,22 @@ char* String::data()
         return string;
 }
 
+/* Function to return the current string data as const pointer
+ * 
+ */
+const char* String::data() const
+{
+        if(string == nullptr)
+        {
+                throw std::invalid_argument("String-Memberfunction data returned Nullptr");
+        }
+        return string;
+}
+
 /* Function to find first instance of char c in string
  * 
  */
-int String::find(char c)
+int String::find(char c) const
 {
         size_t this_length = 0;
         while (string[this_length] != '\0') this_length++;
@@ -112,7 +146,7 @@ int String::find(char c)
 /* Function to print the current string
  * 
  */
-void String::print()
+void String::print() const
 {
         std::cout << string << std::endl;
 }
@@ -125,5 +159,11 @@ void String::clear()
         string[0] = '\0';
         free(string);
 }
+
+String String::operator+ (String other) {
+            String temp(data());
+            temp.append(other.data());
+            return temp;
+        }
 
 
