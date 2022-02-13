@@ -1,34 +1,26 @@
 //string_weak_ptr.cpp
-
-#include <iostream>
-#include "include/string.h"
 #include "include/string_weak_ptr.h"
+#include <iostream> //currently only for debug outputs
+#include "include/string.h"
 #include "include/string_shared_ptr.h"
 // Autor(en): Bjarne Messing, Daniel Mollenhauer, Jonas Schwerthelm
 // Datum: 23.01.2022
 // Kontext: LeibnizFH, C++ 6. Semester, dEA2019
 // Copyright: Bjarne Messing, Daniel Mollenhauer, Jonas Schwerthelm
-// String is a Class to represent an array of chars
+// String_weak_ptr is a class to represent weak Pointers, pointing to Strings
 
 /* Constructor
  * 
  */
-String_weak_ptr::String_weak_ptr()
-{
-        address = nullptr;    //Pointer is initialized empty
-        refcount = new int(0);
-        weakcount = new int(1);
-}
+String_weak_ptr::String_weak_ptr(): address (nullptr), refcount(new int(0)), weakcount(new int(1))
+{}
 
 /* Overloaded Constructor
  * 
  */
-String_weak_ptr::String_weak_ptr(const String_shared_ptr& data)
-{
-        address = data.address;
-        refcount = data.refcount;
-        weakcount = new int(1);
-}
+String_weak_ptr::String_weak_ptr(const String_shared_ptr& data) : 
+address (data.address), refcount (data.refcount), weakcount(new int(1))
+{}
 
 /* Destructor
  * 

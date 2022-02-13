@@ -1,7 +1,7 @@
 //string_weak_ptr.h
 
-#ifndef __STRING_WEAK_PTR__
-#define __STRING_WEAK_PTR__
+#ifndef __INCLUDED_MODERNCPP_STRING_WEAK_PTR_H__
+#define __INCLUDED_MODERNCPP_STRING_WEAK_PTR_H__
 
 // Autor(en): Bjarne Messing, Daniel Mollenhauer, Jonas Schwerthelm
 // Datum: 23.01.2022
@@ -9,12 +9,8 @@
 // Copyright: Bjarne Messing, Daniel Mollenhauer, Jonas Schwerthelm
 // 
 
-#include <iostream>
 #include "string.h"
 #include "string_shared_ptr.h"
-
-
-using namespace std;
 
 
 class String_weak_ptr
@@ -39,27 +35,4 @@ class String_weak_ptr
         String_shared_ptr lock() const;                
 };
 
-/*
-Wir habens fast geschafft produktiv anzufangen zu arbeiten
-und Jonas so 
-"alter daniel was geht eigentlcih mit dem fußball ab?"
--Bochum
--Karlsruhe
--Pauli 
--Gladbach
--Saarbrücken (sad)
--Holstein Kiel
--Sportdirektor
--Hannover
-~Dörtmund
--Hamburg
--Läbpzsch
--Freiburch
-
--Meuthen
--Dorf Plasmers Twitter 
--Infinite Discord Mirror
-
--Der Floid Voat
-*/
 #endif

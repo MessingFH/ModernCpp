@@ -1,7 +1,7 @@
 //string_shared_ptr.h
 
-#ifndef __STRING_SHARED_PTR__
-#define __STRING_SHARED_PTR__
+#ifndef __INCLUDED_MODERNCPP_STRING_SHARED_PTR_H__
+#define __INCLUDED_MODERNCPP_STRING_SHARED_PTR_H__
 
 // Autor(en): Bjarne Messing, Daniel Mollenhauer, Jonas Schwerthelm
 // Datum: 23.01.2022
@@ -9,9 +9,6 @@
 // Copyright: Bjarne Messing, Daniel Mollenhauer, Jonas Schwerthelm
 // 
 
-#include <iostream>
-
-using namespace std;
 
 class String; //für Aufgabe 2 c)
 

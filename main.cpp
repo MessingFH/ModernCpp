@@ -9,7 +9,7 @@
 // Datum: 23.01.2022
 // Kontext: LeibnizFH, C++ 6. Semester, dEA2019
 // Copyright: Bjarne Messing, Daniel Mollenhauer, Jonas Schwerthelm
-// main.cpp for debuging 2 c)
+// main.cpp
 
 using namespace std;
 
@@ -26,8 +26,8 @@ String test3(std::move(test2));
 String result = (String() + "b" + "c");
 result.print();
 */
-String x("");
-std::cout << x.at(1) << x[0]<<std::endl;
+String x(nullptr);
+
 
 
 }

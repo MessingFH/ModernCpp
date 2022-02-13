@@ -1,9 +1,8 @@
 //string.cpp
 
-#include <iostream>
-
 #include "include/string.h"
-
+#include <iostream>
+#include "include/exception.h"
 // Autor(en): Bjarne Messing, Daniel Mollenhauer, Jonas Schwerthelm
 // Datum: 23.01.2022
 // Kontext: LeibnizFH, C++ 6. Semester, dEA2019
@@ -13,25 +12,31 @@
 /* Constructor
  * 
  */
-String::String() : string(nullptr)
+String::String() : string((char*)malloc(1)), length(0)
 {
         std::cout << "User defined String constructor invoked." << std::endl; //Used as Debug
-        string = new char[1];    //string is initialized empty
         string[0] = '\0';
 }
 
 /* Overloaded Constructor
  * 
  */
-String::String(const char* data)
+String::String(const char* data) : length(0)
 {
         std::cout << "User defined String-parameter constructor invoked." << std::endl; //Used as Debug
-        size_t length = 0;
         if(data != NULL){
                 while (data[length] != '\0') length++;          //calculate length of given data
-        } 
-        string = (char*)malloc(length);         //allocate memory
-
+        }
+        try{ 
+                string = (char*)malloc(length);         //allocate memory
+                if (string == NULL){
+                        throw (Exception("Malloc in String-Constructor failed", __FILE__, __LINE__));
+                }
+        }catch(const Exception& e){
+                std::cout << "Error:" << e.what() 
+                        << "\nLine: " << e.getLineNumber()
+                        << "\nFile: " << e.getFile();
+        }
         for(int i = 0; i < length; i++)
         {
                 string[i] = data[i];            //fill allocated memory
@@ -57,9 +62,16 @@ String::~String()
 String::String(const String& rhs) 
          : string{ nullptr } 
 {
-        size_t length = 0;
-        while (rhs.string[length] != '\0') length++;
+        try{
         string = (char*)malloc(length);
+        if (string == NULL){
+                        throw (Exception("Malloc in String-Copy-Constructor failed", __FILE__, __LINE__));
+                }
+        }catch(const Exception& e){
+                std::cout << "Error:" << e.what() 
+                        << "\nLine: " << e.getLineNumber()
+                        << "\nFile: " << e.getFile();
+        }
         *string = *rhs.string;
         std::cout << "User defined String copy constructor invoked." << std::endl; //Used as Debug for 2 c)
 }
@@ -80,25 +92,26 @@ String::String(String&& other)
  */
 void String::append(const char* data)
 {
-        size_t this_length = 0;
-        if(string != NULL)
-        {
-                while (string[this_length] != '\0') this_length++;      //calculate length of current string
-        }
-        
         size_t data_length = 0;
         if(data != NULL){
                 while (data[data_length] != '\0') data_length++;      //calculate length of given data
         }
-
-        realloc(string, this_length+data_length);             //reallocate memory (in case of nullptr, behaves like malloc)
-        
+        try{
+        string = (char*)realloc(string, length+data_length);             //reallocate memory (in case of nullptr, behaves like malloc)
+        if (string == NULL){
+                        throw (Exception("Realloc in String-Append failed", __FILE__, __LINE__));
+                }
+        }catch(const Exception& e){
+                std::cout << "Error:" << e.what() 
+                        << "\nLine: " << e.getLineNumber()
+                        << "\nFile: " << e.getFile();
+        }
         for(int i = 0; i < data_length; i++)
         {
-                string[this_length+i] = data[i];              //fill the reallocated memory
+                string[length+i] = data[i];              //fill the reallocated memory
         }
-        string[this_length+data_length] = '\0';               //terminate string
-        
+        string[length+data_length] = '\0';               //terminate string
+        length += data_length;
 }
 
 /* Function to return the current string data as pointer
@@ -106,10 +119,6 @@ void String::append(const char* data)
  */
 char* String::data()
 {
-        if(string == nullptr)
-        {
-                throw std::invalid_argument("String-Memberfunction data returned Nullptr");
-        }
         return string;
 }
 
@@ -130,17 +139,15 @@ const char* String::data() const
  */
 int String::find(char c) const
 {
-        size_t this_length = 0;
-        while (string[this_length] != '\0') this_length++;
-
-        for(int i = 0; i < this_length; i++)
+        for(int i = 0; i < length; i++)
         {
                 if(string[i] == c) 
                 {
                         return i;
                 }
         }
-        return -1;      //-1 as feedback "not found"
+        const int charNotFound = -1;      //-1 as feedback "not found"
+        return charNotFound;
 }
 
 /* Function to print the current string
@@ -156,8 +163,9 @@ void String::print() const
  */
 void String::clear()
 {
+        string = (char*)realloc (string, 1);
         string[0] = '\0';
-        free(string);
+        length = 0;
 }
 
 /* Function to use operator + for concat
@@ -174,9 +182,7 @@ String String::operator+ (String other) {
  */
 char &String::operator[](int i) const
 {
-        size_t this_length = -2;
-        while (string[this_length] != '\0') this_length++;
-        if (i>this_length || i<0 ){
+        if (i>length-2 || i<0 ){
                 throw std::invalid_argument("String-Operator [] index out of bounds");
                 return string[0];       //return first element
         }
@@ -188,9 +194,7 @@ char &String::operator[](int i) const
  */
 char String::at(int i) const
 {
-        size_t this_length = -2;
-        while (string[this_length] != '\0') this_length++;
-        if (i>this_length || i<0 ){
+        if (i>length-2 || i<0 ){
                 throw std::invalid_argument("String-Operator .at() index out of bounds");
                 return string[0];       //return first element
         }

@@ -1,32 +1,25 @@
 //string_shared_ptr.cpp
-
-#include <iostream>
-
-#include "include/string.h"
 #include "include/string_shared_ptr.h"
+#include <iostream> //currently only for debug outputs
+#include "include/string.h"
+
 // Autor(en): Bjarne Messing, Daniel Mollenhauer, Jonas Schwerthelm
 // Datum: 23.01.2022
 // Kontext: LeibnizFH, C++ 6. Semester, dEA2019
 // Copyright: Bjarne Messing, Daniel Mollenhauer, Jonas Schwerthelm
-// String is a Class to represent an array of chars
+// String_shared_ptr is a class to represent shared Pointers pointing to Strings
 
 /* Constructor
  * 
  */
-String_shared_ptr::String_shared_ptr()
-{
-        address = nullptr;    //pointer is initialized empty
-        refcount = new int(1);       
-}
+String_shared_ptr::String_shared_ptr() : address (nullptr), refcount(new int(1))
+{}
 
 /* Overloaded Constructor
  * 
  */
-String_shared_ptr::String_shared_ptr(String* data)
-{
-        address = data;
-        refcount = new int(1);
-}
+String_shared_ptr::String_shared_ptr(String* data) : address(data), refcount(new int(1))
+{}
 
 /* Destructor
  * 

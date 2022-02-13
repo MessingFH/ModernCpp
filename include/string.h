@@ -1,17 +1,14 @@
 //string.h
 
-#ifndef __STRING__
-#define __STRING__
+#ifndef __INCLUDED_MODERNCPP_STRING_H__
+#define __INCLUDED_MODERNCPP_STRING_H__
 
 // Autor(en): Bjarne Messing, Daniel Mollenhauer, Jonas Schwerthelm
 // Datum: 23.01.2022
 // Kontext: LeibnizFH, C++ 6. Semester, dEA2019
 // Copyright: Bjarne Messing, Daniel Mollenhauer, Jonas Schwerthelm
 // 
-
-#include <iostream>
-using namespace std;
-
+#include <stddef.h> //included for the size_t type
 
 class String
 {
@@ -19,6 +16,7 @@ class String
 
     private:
         char* string;
+        size_t length;
 
     public:
         // ctor
