@@ -9,7 +9,8 @@
 // Copyright: Bjarne Messing, Daniel Mollenhauer, Jonas Schwerthelm
 // String is a Class to represent an array of chars
 
-/* Constructor
+/**
+ * @brief Construct a new String:: String object
  * 
  */
 String::String() : string((char*)malloc(1)), length(0)
@@ -18,8 +19,10 @@ String::String() : string((char*)malloc(1)), length(0)
         string[0] = '\0';
 }
 
-/* Overloaded Constructor
+/**
+ * @brief Construct a new overloaded String:: String object
  * 
+ * @param data 
  */
 String::String(const char* data) : length(0)
 {
@@ -44,7 +47,8 @@ String::String(const char* data) : length(0)
         string[length] = '\0';          //add string termination
 }
 
-/* Destructor
+/**
+ * @brief Destroy the String:: String object
  * 
  */
 String::~String()
@@ -56,8 +60,10 @@ String::~String()
         }
         string = nullptr;
 }
-/* Copy Constructor
+/**
+ * @brief Copy-Construct a new String:: String object
  * 
+ * @param rhs 
  */
 String::String(const String& rhs) 
          : string{ nullptr } 
@@ -76,8 +82,10 @@ String::String(const String& rhs)
         std::cout << "User defined String copy constructor invoked." << std::endl; //Used as Debug for 2 c)
 }
 
-/* Move Constructor
+/**
+ * @brief Move-Construct a new String:: String object
  * 
+ * @param other 
  */
 String::String(String&& other) 
          : string{ other.string } 
@@ -87,8 +95,10 @@ String::String(String&& other)
 }
 
 
-/* Function to append further chars to the string
+/**
+ * @brief Function to append further chars to the string
  * 
+ * @param data 
  */
 void String::append(const char* data)
 {
@@ -114,8 +124,10 @@ void String::append(const char* data)
         length += data_length;
 }
 
-/* Function to return the current string data as pointer
+/**
+ * @brief Function to return the current string data as pointer
  * 
+ * @return char* 
  */
 char* String::data()
 {
@@ -134,8 +146,11 @@ const char* String::data() const
         return string;
 }
 
-/* Function to find first instance of char c in string
+/**
+ * @brief Function to find first instance of char c in string
  * 
+ * @param c 
+ * @return int 
  */
 int String::find(char c) const
 {
@@ -150,7 +165,8 @@ int String::find(char c) const
         return charNotFound;
 }
 
-/* Function to print the current string
+/**
+ * @brief Function to print the current string
  * 
  */
 void String::print() const
@@ -158,18 +174,31 @@ void String::print() const
         std::cout << string << std::endl;
 }
 
-/* Function to clear the string and free memory
+/**
+ * @brief Function to clear the string and reallocate memory
  * 
  */
 void String::clear()
 {
-        string = (char*)realloc (string, 1);
+        try{ 
+                string = (char*)realloc (string, 1);
+                if (string == NULL){
+                        throw (Exception("Malloc in String-Constructor failed", __FILE__, __LINE__));
+                }
+        }catch(const Exception& e){
+                std::cout << "Error:" << e.what() 
+                        << "\nLine: " << e.getLineNumber()
+                        << "\nFile: " << e.getFile();
+        }
         string[0] = '\0';
         length = 0;
 }
 
-/* Function to use operator + for concat
+/**
+ * @brief Function to use operator + for concat
  * 
+ * @param other 
+ * @return String 
  */
 String String::operator+ (String other) {
             String temp(data());
@@ -177,8 +206,11 @@ String String::operator+ (String other) {
             return temp;
         }
 
-/* Function to use operator [] for indexing
+/**
+ * @brief Function to use operator [] for indexing
  * 
+ * @param i 
+ * @return char& 
  */
 char &String::operator[](int i) const
 {
@@ -189,8 +221,11 @@ char &String::operator[](int i) const
         return string[i];
 }
 
-/* Function to use at() for indexing
+/**
+ * @brief Function to use at() for indexing
  * 
+ * @param i 
+ * @return char 
  */
 char String::at(int i) const
 {

@@ -9,19 +9,23 @@
 // Copyright: Bjarne Messing, Daniel Mollenhauer, Jonas Schwerthelm
 // String_shared_ptr is a class to represent shared Pointers pointing to Strings
 
-/* Constructor
+/**
+ * @brief Construct a new String_shared_ptr::String_shared_ptr object
  * 
  */
 String_shared_ptr::String_shared_ptr() : address (nullptr), refcount(new int(1))
 {}
 
-/* Overloaded Constructor
+/**
+ * @brief Construct a new overloaded String_shared_ptr::String_shared_ptr object
  * 
+ * @param data 
  */
 String_shared_ptr::String_shared_ptr(String* data) : address(data), refcount(new int(1))
 {}
 
-/* Destructor
+/**
+ * @brief Destroy the String_shared_ptr::String_shared_ptr object
  * 
  */
 String_shared_ptr::~String_shared_ptr()
@@ -42,8 +46,10 @@ String_shared_ptr::~String_shared_ptr()
         }
 }
 
-/* Copy Constructor
+/**
+ * @brief Copy-Construct a new String_shared_ptr::String_shared_ptr object
  * 
+ * @param rhs 
  */
 String_shared_ptr::String_shared_ptr(const String_shared_ptr& rhs) 
          : address{ rhs.address }, refcount{ rhs.refcount } 
@@ -53,8 +59,9 @@ String_shared_ptr::String_shared_ptr(const String_shared_ptr& rhs)
         std::cout << "User defined shared copy constructor invoked." << std::endl; //Used as Debug
 }
 
-/* Function to reset the shared_ptr
- * while checking for Refcount
+/**
+ * @brief Function to reset the shared_ptr while checking for Refcount
+ * 
  */
 void String_shared_ptr::reset()
 {

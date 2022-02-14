@@ -9,20 +9,24 @@
 // Copyright: Bjarne Messing, Daniel Mollenhauer, Jonas Schwerthelm
 // String_weak_ptr is a class to represent weak Pointers, pointing to Strings
 
-/* Constructor
+/**
+ * @brief Construct a new String_weak_ptr::String_weak_ptr object
  * 
  */
 String_weak_ptr::String_weak_ptr(): address (nullptr), refcount(new int(0)), weakcount(new int(1))
 {}
 
-/* Overloaded Constructor
+/**
+ * @brief Construct a new overloaded String_weak_ptr::String_weak_ptr object
  * 
+ * @param data 
  */
 String_weak_ptr::String_weak_ptr(const String_shared_ptr& data) : 
 address (data.address), refcount (data.refcount), weakcount(new int(1))
 {}
 
-/* Destructor
+/**
+ * @brief Destroy the String_weak_ptr::String_weak_ptr object
  * 
  */
 String_weak_ptr::~String_weak_ptr()
@@ -41,8 +45,10 @@ String_weak_ptr::~String_weak_ptr()
         std::cout << "Weak_ptr destructor called" << std::endl;        //Used as Debug
 }
 
-/* Copy Constructor
+/**
+ * @brief Copy-Construct a new String_weak_ptr::String_weak_ptr object
  * 
+ * @param rhs 
  */
 String_weak_ptr::String_weak_ptr(const String_weak_ptr& rhs) 
          : address{ rhs.address } 
@@ -52,8 +58,11 @@ String_weak_ptr::String_weak_ptr(const String_weak_ptr& rhs)
         std::cout << "User defined weak copy constructor invoked."; //Used as Debug
 }
 
-/* Function to check the status of the weak_ptr
+/**
+ * @brief Function to check the status of the weak_ptr
  * 
+ * @return true 
+ * @return false 
  */
 bool String_weak_ptr::expired() const
 {
@@ -64,8 +73,10 @@ bool String_weak_ptr::expired() const
         return false;
 }
 
-/* Function to lock the weak_ptr, by returning a shared_ptr
- * depending on the state of expired()
+/**
+ * @brief Function to lock the weak_ptr, by returning a shared_ptr depending on the state of expired()
+ * 
+ * @return String_shared_ptr 
  */
 String_shared_ptr String_weak_ptr::lock() const
 {
