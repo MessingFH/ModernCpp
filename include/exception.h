@@ -10,7 +10,7 @@
 // 
 
 #include <exception>
-#include <string.h>
+#include "string.h"
 
 class Exception : virtual public std::exception {
 
@@ -22,37 +22,14 @@ class Exception : virtual public std::exception {
         String error_message;      //Error message
     
     public:
-    /** Constructor
-         */
-        //explicit 
-        Exception(const String& msg, const String& file_na, const int line_num):
-            line_number(line_num),
-            file_name(file_na),
-            error_message(msg)
-            {}
-
-        /** Destructor.
-         *  
-         */
-        ~Exception() throw () {}
-        
-        const char* what() const throw () {
-            return error_message.data();
-        }
-
-        /** Returns error number.
-         *  @return #error_number
-         */
-        const int getLineNumber() const throw() {
-            return line_number;
-        }
-        
-        /**Returns error offset.
-         * @return #error_offset
-         */
-        const char* getFile() const throw() {
-            return file_name.data();
-        }
+        //explicit ctr
+        Exception(const String& msg, const String& file_na, const int line_num);
+        //dstr
+        ~Exception() throw ();
+        //methods
+        const char* what() const throw ();
+        const int getLineNumber() const throw();
+        const char* getFile() const throw();
 
 };
 

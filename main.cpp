@@ -13,6 +13,7 @@
 
 using namespace std;
 
+
 int main () {
 /*    
 String test;
@@ -26,7 +27,7 @@ String test3(std::move(test2));
 String result = (String() + "b" + "c");
 result.print();
 */
-String x(nullptr);
+String* test = new String("xyz");
 
 
 
