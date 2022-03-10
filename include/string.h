@@ -15,13 +15,13 @@ class String
     //friend class shared_string_ptr;
 
     private:
-        char* string;
+        char* stringptr;
         size_t length;
 
     public:
         // ctor
-        String();
-        String(const char* data);
+        String()noexcept;
+        String(const char* data) noexcept;
         // dtor
         ~String();
         //cpy ctor

@@ -1,4 +1,4 @@
-//string.cpp
+//stringptr.cpp
 
 #include "include/string.h"
 #include <iostream>
@@ -13,26 +13,37 @@
  * @brief Construct a new String:: String object
  * 
  */
-String::String() : string((char*)malloc(1)), length(0)
+String::String() noexcept : length(0)
 {
+        try{ 
+                stringptr = (char*)malloc(length);         //allocate memory
+                if (stringptr == NULL){
+                        throw (Exception("Malloc in String-Constructor failed", __FILE__, __LINE__));
+                }
+        }catch(const Exception& e){
+                std::cout << "Error:" << e.what() 
+                        << "\nLine: " << e.getLineNumber()
+                        << "\nFile: " << e.getFile();
+        }
+
         std::cout << "User defined String constructor invoked." << std::endl; //Used as Debug
-        string[0] = '\0';
+        stringptr[0] = '\0';
 }
 
 /**
  * @brief Construct a new overloaded String:: String object
- * 
+ * Noexcept
  * @param data 
  */
-String::String(const char* data) : length(0)
+String::String(const char* data) noexcept : length(0)
 {
         std::cout << "User defined String-parameter constructor invoked." << std::endl; //Used as Debug
         if(data != NULL){
                 while (data[length] != '\0') length++;          //calculate length of given data
         }
         try{ 
-                string = (char*)malloc(length);         //allocate memory
-                if (string == NULL){
+                stringptr = (char*)malloc(length);         //allocate memory
+                if (stringptr == NULL){
                         throw (Exception("Malloc in String-Constructor failed", __FILE__, __LINE__));
                 }
         }catch(const Exception& e){
@@ -42,9 +53,9 @@ String::String(const char* data) : length(0)
         }
         for(int i = 0; i < length; i++)
         {
-                string[i] = data[i];            //fill allocated memory
+                stringptr[i] = data[i];            //fill allocated memory
         }
-        string[length] = '\0';          //add string termination
+        stringptr[length] = '\0';          //add stringptr termination
 }
 
 /**
@@ -54,11 +65,11 @@ String::String(const char* data) : length(0)
 String::~String()
 {
         std::cout << "User defined String destructor invoked." << std::endl; //Used as Debug
-        if (string != nullptr)
+        if (stringptr != nullptr)
         {
                 clear();
         }
-        string = nullptr;
+        stringptr = nullptr;
 }
 /**
  * @brief Copy-Construct a new String:: String object
@@ -66,11 +77,11 @@ String::~String()
  * @param rhs 
  */
 String::String(const String& rhs) 
-         : string{ nullptr } 
+         : stringptr{ nullptr } 
 {
         try{
-        string = (char*)malloc(length);
-        if (string == NULL){
+        stringptr = (char*)malloc(length);
+        if (stringptr == NULL){
                         throw (Exception("Malloc in String-Copy-Constructor failed", __FILE__, __LINE__));
                 }
         }catch(const Exception& e){
@@ -78,7 +89,7 @@ String::String(const String& rhs)
                         << "\nLine: " << e.getLineNumber()
                         << "\nFile: " << e.getFile();
         }
-        *string = *rhs.string;
+        *stringptr = *rhs.stringptr;
         std::cout << "User defined String copy constructor invoked." << std::endl; //Used as Debug for 2 c)
 }
 
@@ -88,16 +99,16 @@ String::String(const String& rhs)
  * @param other 
  */
 String::String(String&& other) 
-         : string{ other.string } 
+         : stringptr{ other.stringptr } 
 {
         std::cout << "User defined String move constructor invoked."<< std::endl; //Used as Debug for 2 c)
-        other.string = nullptr;
+        other.stringptr = nullptr;
 }
 
 
 /**
- * @brief Function to append further chars to the string
- * 
+ * @brief Function to append further chars to the stringptr
+ *        Basic Safety is guranteed -> undefined behaviour can occure f.e. regarding max_size at "stringptr[length+data_length] = \0"
  * @param data 
  */
 void String::append(const char* data)
@@ -107,48 +118,52 @@ void String::append(const char* data)
                 while (data[data_length] != '\0') data_length++;      //calculate length of given data
         }
         try{
-        string = (char*)realloc(string, length+data_length);             //reallocate memory (in case of nullptr, behaves like malloc)
-        if (string == NULL){
+        size_t final_length = length + data_length;
+        char *temp;
+        temp = (char*) realloc(stringptr, final_length*sizeof(char));             //reallocate memory (in case of nullptr, behaves like malloc)
+        if (temp == NULL){
                         throw (Exception("Realloc in String-Append failed", __FILE__, __LINE__));
                 }
+                stringptr = temp;
         }catch(const Exception& e){
                 std::cout << "Error:" << e.what() 
                         << "\nLine: " << e.getLineNumber()
                         << "\nFile: " << e.getFile();
         }
+        
         for(int i = 0; i < data_length; i++)
         {
-                string[length+i] = data[i];              //fill the reallocated memory
+                stringptr[length+i] = data[i];              //fill the reallocated memory
         }
-        string[length+data_length] = '\0';               //terminate string
+        stringptr[length+data_length] = '\0';               //terminate stringptr
         length += data_length;
 }
 
 /**
- * @brief Function to return the current string data as pointer
+ * @brief Function to return the current stringptr data as pointer
  * 
  * @return char* 
  */
 char* String::data()
 {
-        return string;
+        return stringptr;
 }
 
-/* Function to return the current string data as const pointer
+/* Function to return the current stringptr data as const pointer
  * 
  */
 const char* String::data() const
 {
-        if(string == nullptr)
+        if(stringptr == nullptr)
         {
                 throw std::invalid_argument("String-Memberfunction data returned Nullptr");
         }
-        return string;
+        return stringptr;
 }
 
 /**
- * @brief Function to find first instance of char c in string
- * 
+ * @brief Function to find first instance of char c in stringptr
+ *        Noexcept/Nothrow
  * @param c 
  * @return int 
  */
@@ -156,7 +171,7 @@ int String::find(char c) const
 {
         for(int i = 0; i < length; i++)
         {
-                if(string[i] == c) 
+                if(stringptr[i] == c) 
                 {
                         return i;
                 }
@@ -166,31 +181,52 @@ int String::find(char c) const
 }
 
 /**
- * @brief Function to print the current string
+ * @brief Function to print the current stringptr
  * 
  */
 void String::print() const
 {
-        std::cout << string << std::endl;
+        std::cout << stringptr << std::endl;
 }
 
 /**
- * @brief Function to clear the string and reallocate memory
+ * @brief Function to clear the stringptr and reallocate memory
  * 
  */
-void String::clear()
+void String::clear() 
 {
         try{ 
-                string = (char*)realloc (string, 1);
-                if (string == NULL){
+
+               char *ptr, *new_ptr;
+	ptr = (char*) malloc(3*sizeof(char));
+	
+
+	/* Initializing memory block */
+	for (int i=0; i<2; i++)
+	{
+		ptr[i] = 't';
+	}
+        ptr[2]='\0';
+
+	/* reallocating memory */
+        char *temp = stringptr;
+	new_ptr = (char*) realloc(temp, 1*sizeof(char));
+	
+	new_ptr[0] = '\0';
+
+                stringptr = (char*)realloc (stringptr, 1*sizeof(char));
+                
+                if (stringptr == NULL){
                         throw (Exception("Malloc in String-Constructor failed", __FILE__, __LINE__));
                 }
+                
         }catch(const Exception& e){
                 std::cout << "Error:" << e.what() 
                         << "\nLine: " << e.getLineNumber()
                         << "\nFile: " << e.getFile();
         }
-        string[0] = '\0';
+        
+        stringptr[0] = '\0';
         length = 0;
 }
 
@@ -208,7 +244,7 @@ String String::operator+ (String other) {
 
 /**
  * @brief Function to use operator [] for indexing
- * 
+ * Strong gurantee
  * @param i 
  * @return char& 
  */
@@ -216,14 +252,14 @@ char &String::operator[](int i) const
 {
         if (i>length-2 || i<0 ){
                 throw std::invalid_argument("String-Operator [] index out of bounds");
-                return string[0];       //return first element
+                return stringptr[0];       //return first element
         }
-        return string[i];
+        return stringptr[i];
 }
 
 /**
  * @brief Function to use at() for indexing
- * 
+ * Strong gurantee
  * @param i 
  * @return char 
  */
@@ -231,8 +267,8 @@ char String::at(int i) const
 {
         if (i>length-2 || i<0 ){
                 throw std::invalid_argument("String-Operator .at() index out of bounds");
-                return string[0];       //return first element
+                return stringptr[0];       //return first element
         }
-        return string[i];
+        return stringptr[i];
 }
 
