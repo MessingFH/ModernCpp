@@ -5,6 +5,9 @@
 #include "include/string.h"
 #include "include/string_shared_ptr.h"
 #include "include/string_weak_ptr.h"
+#include "include/exception.h"
+#include "include/string_set.h"
+#include "include/string_set_node.h"
 
 // Autor(en): Daniel Mollenhauer, Bjarne Messing, Jonas Schwerthelm
 // Datum: 23.01.2022
@@ -31,43 +34,13 @@ result.print();
 */
 
 String test;
-test.append("te");
-test.clear();
-float *ptr, *new_ptr;
-	ptr = (float*) malloc(5*sizeof(float));
-	if(ptr==NULL)
-	{
-		cout << "Memory Allocation Failed";
-		exit(1);
-	}
-
-	/* Initializing memory block */
-	for (int i=0; i<5; i++)
-	{
-		ptr[i] = i*1.5;
-	}
-
-	/* reallocating memory */
-	new_ptr = (float*) realloc(ptr, 10*sizeof(float));
-	if(new_ptr==NULL)
-	{
-		cout << "Memory Re-allocation Failed";
-		exit(1);
-	}
-	
-	/* Initializing re-allocated memory block */
-	for (int i=5; i<10; i++)
-	{
-		new_ptr[i] = i*2.5;
-	}
-	cout << "Printing Values" << endl;
-	
-	for (int i=0; i<10; i++)
-	{
-		cout << new_ptr[i] << endl;
-	}
-	free(new_ptr);
-	
-	return 0;
-
+String a("a");
+String b("b");
+String c("c");
+String_set s;
+String d("d");
+s.insert(b);
+s.insert(a);
+s.insert(c);
 }
+

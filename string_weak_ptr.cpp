@@ -31,15 +31,15 @@ address (data.address), refcount (data.refcount), weakcount(new int(1))
  */
 String_weak_ptr::~String_weak_ptr()
 {
+        *weakcount--;
         if(*weakcount <= 1)
         {
-                delete [] weakcount;
+                delete weakcount;
                 address = nullptr;
                 weakcount = nullptr;
         }
         else
         {
-                *weakcount--;
                 address = nullptr;
         }
         std::cout << "Weak_ptr destructor called" << std::endl;        //Used as Debug
@@ -82,8 +82,7 @@ String_shared_ptr String_weak_ptr::lock() const
 {
         if(expired() == false)
         {
-                String_shared_ptr x(address);
-                x.refcount = refcount;
+                String_shared_ptr x(address, refcount);
                 return x;
         }
         else

@@ -1,4 +1,4 @@
-//string_shared_ptr.h
+//string_set.h
 
 #ifndef __INCLUDED_MODERNCPP_STRING_SET_H__
 #define __INCLUDED_MODERNCPP_STRING_SET_H__
@@ -9,12 +9,13 @@
 // Copyright: Bjarne Messing, Daniel Mollenhauer, Jonas Schwerthelm
 // 
 class String;
+class String_set_node;
 
 class String_set
 {
     //friend class String_set_node;
     private:
-        
+        String_set_node* parent;
 
     public:
         // ctor
@@ -28,6 +29,7 @@ class String_set
         //methods
 
         void insert(String s);
+        void insert(String_set_node s);
         String find(String s);
         void insert_all (String_set set);
         

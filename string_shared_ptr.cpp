@@ -25,22 +25,32 @@ String_shared_ptr::String_shared_ptr(String* data) : address(data), refcount(new
 {}
 
 /**
+ * @brief Construct a new String_shared_ptr::String_shared_ptr object
+ * 
+ * @param data 
+ * @param refc 
+ */
+String_shared_ptr::String_shared_ptr(String* data, int* refc) : address(data), refcount(refc)
+{}
+
+/**
  * @brief Destroy the String_shared_ptr::String_shared_ptr object
  * 
  */
 String_shared_ptr::~String_shared_ptr()
 {
         std::cout << "User defined shared destructor invoked."<< *refcount << std::endl; //Used as Debug
+        *refcount--;
         if(*refcount <= 1)
         {
                 delete refcount;
-                (*address).clear();
+                
+                delete address;
                 refcount = nullptr;
                 address = nullptr;
         }
         else
         {
-                *refcount--;
                 address = nullptr;
                 //only delete this pointer
         }
@@ -65,14 +75,16 @@ String_shared_ptr::String_shared_ptr(const String_shared_ptr& rhs)
  */
 void String_shared_ptr::reset()
 {
+        *refcount--;
         if(*refcount <= 1)
         {       
-                delete[] address;
+                delete address;
+                delete refcount;
                 address = nullptr;
+                refcount = nullptr;
         }
         else
         {
-                *refcount--;
                 address = nullptr;
         }
 }

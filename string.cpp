@@ -77,7 +77,7 @@ String::~String()
  * @param rhs 
  */
 String::String(const String& rhs) 
-         : stringptr{ nullptr } 
+         : stringptr(nullptr), length(rhs.length) 
 {
         try{
         stringptr = (char*)malloc(length);
@@ -89,7 +89,12 @@ String::String(const String& rhs)
                         << "\nLine: " << e.getLineNumber()
                         << "\nFile: " << e.getFile();
         }
-        *stringptr = *rhs.stringptr;
+
+        for(int i = 0; i < length; i++)
+        {
+                stringptr[i] = rhs.stringptr[i];            //fill allocated memory
+        }
+        stringptr[length] = '\0';
         std::cout << "User defined String copy constructor invoked." << std::endl; //Used as Debug for 2 c)
 }
 
@@ -99,10 +104,10 @@ String::String(const String& rhs)
  * @param other 
  */
 String::String(String&& other) 
-         : stringptr{ other.stringptr } 
+         : stringptr(other.stringptr ), length(other.length) 
 {
+        other.clear();
         std::cout << "User defined String move constructor invoked."<< std::endl; //Used as Debug for 2 c)
-        other.stringptr = nullptr;
 }
 
 
@@ -118,13 +123,12 @@ void String::append(const char* data)
                 while (data[data_length] != '\0') data_length++;      //calculate length of given data
         }
         try{
-        size_t final_length = length + data_length;
-        char *temp;
-        temp = (char*) realloc(stringptr, final_length*sizeof(char));             //reallocate memory (in case of nullptr, behaves like malloc)
-        if (temp == NULL){
+        size_t final_length = length + data_length+1;
+        stringptr = (char*) realloc(stringptr, final_length*sizeof(char));             //reallocate memory (in case of nullptr, behaves like malloc)
+        if (stringptr == NULL){
                         throw (Exception("Realloc in String-Append failed", __FILE__, __LINE__));
                 }
-                stringptr = temp;
+
         }catch(const Exception& e){
                 std::cout << "Error:" << e.what() 
                         << "\nLine: " << e.getLineNumber()
@@ -135,8 +139,10 @@ void String::append(const char* data)
         {
                 stringptr[length+i] = data[i];              //fill the reallocated memory
         }
+        
         stringptr[length+data_length] = '\0';               //terminate stringptr
         length += data_length;
+
 }
 
 /**
@@ -154,10 +160,6 @@ char* String::data()
  */
 const char* String::data() const
 {
-        if(stringptr == nullptr)
-        {
-                throw std::invalid_argument("String-Memberfunction data returned Nullptr");
-        }
         return stringptr;
 }
 
@@ -196,28 +198,9 @@ void String::print() const
 void String::clear() 
 {
         try{ 
-
-               char *ptr, *new_ptr;
-	ptr = (char*) malloc(3*sizeof(char));
-	
-
-	/* Initializing memory block */
-	for (int i=0; i<2; i++)
-	{
-		ptr[i] = 't';
-	}
-        ptr[2]='\0';
-
-	/* reallocating memory */
-        char *temp = stringptr;
-	new_ptr = (char*) realloc(temp, 1*sizeof(char));
-	
-	new_ptr[0] = '\0';
-
                 stringptr = (char*)realloc (stringptr, 1*sizeof(char));
-                
                 if (stringptr == NULL){
-                        throw (Exception("Malloc in String-Constructor failed", __FILE__, __LINE__));
+                        throw (Exception("Malloc in String-Clear failed", __FILE__, __LINE__));
                 }
                 
         }catch(const Exception& e){
@@ -248,7 +231,22 @@ String String::operator+ (String other) {
  * @param i 
  * @return char& 
  */
-char &String::operator[](int i) const
+char& String::operator[](int i) const
+{
+        if (i>length-2 || i<0 ){
+                throw std::invalid_argument("String-Operator [] index out of bounds");
+                return stringptr[0];       //return first element
+        }
+        return stringptr[i];
+}
+
+/**
+ * @brief 
+ * 
+ * @param i 
+ * @return const char& 
+ */
+const char& String::operator[](int i)
 {
         if (i>length-2 || i<0 ){
                 throw std::invalid_argument("String-Operator [] index out of bounds");
@@ -263,7 +261,7 @@ char &String::operator[](int i) const
  * @param i 
  * @return char 
  */
-char String::at(int i) const
+char& String::at(int i) const
 {
         if (i>length-2 || i<0 ){
                 throw std::invalid_argument("String-Operator .at() index out of bounds");
@@ -272,3 +270,17 @@ char String::at(int i) const
         return stringptr[i];
 }
 
+/**
+ * @brief 
+ * 
+ * @param i 
+ * @return const char 
+ */
+const char& String::at(int i) 
+{
+        if (i>length-2 || i<0 ){
+                throw std::invalid_argument("String-Operator .at() index out of bounds");
+                return stringptr[0];       //return first element
+        }
+        return stringptr[i];
+}

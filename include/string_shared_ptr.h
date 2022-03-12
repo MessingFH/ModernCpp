@@ -23,6 +23,7 @@ class String_shared_ptr
         // ctor
         String_shared_ptr();
         String_shared_ptr(String* data);
+        String_shared_ptr(String* data, int* refc);
         // dtor
         ~String_shared_ptr();
         //cpy ctor

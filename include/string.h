@@ -37,8 +37,11 @@ class String
         void print() const;
         void clear();
         String operator+(String other);
-    	char &operator[](int i) const;
-        char at(int i) const;
+    	char& operator[](int i) const;
+        const char& operator[](int i);
+        char& at(int i) const;
+        const char& at(int i);
+
 };
 
 #endif
