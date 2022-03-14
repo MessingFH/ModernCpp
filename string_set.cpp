@@ -1,5 +1,8 @@
 //string_set.cpp
 #include "include/string_set.h"
+#include<algorithm>
+#include<vector>
+#include<exception>
 #include "include/string_set_node.h"
 #include "include/string.h"
 
@@ -21,7 +24,7 @@ String_set::String_set() : parent(nullptr)
  * @brief Destroy the String_set::String_set object
  * 
  */
-String_set::~String_set()
+String_set::~String_set() noexcept
 {
         
 }
@@ -31,7 +34,7 @@ String_set::~String_set()
  * 
  * @param rhs 
  */
-String_set::String_set(const String_set& rhs) 
+String_set::String_set(const String_set& rhs) : parent(rhs.parent)
 {
 
 }
@@ -43,12 +46,12 @@ String_set::String_set(const String_set& rhs)
  */
 String_set::String_set(String_set&& other)
 {
-
+    std::swap(parent, other.parent);
 }
 
 /**
  * @brief function to insert a string into a set
- * 
+ * strong exception safety, while s is correct
  * @param s 
  */
 void String_set::insert(String s)
@@ -65,7 +68,7 @@ void String_set::insert(String s)
 
 /**
  * @brief overloaded function to insert a string_node into a set
- * 
+ * strong exception safety, while s is correct
  * @param s 
  */
 void String_set::insert(String_set_node s)
@@ -82,7 +85,7 @@ void String_set::insert(String_set_node s)
 
 /**
  * @brief finds s, else returns nullptr
- * 
+ * strong exception safety, provided s is a correct string
  * @param s 
  * @return String 
  */
@@ -95,17 +98,41 @@ String String_set::find(String s)
     return parent->find(s);
 }
 
+/**
+ * @brief insert a whole set
+ * basic exception safety, elements might be inserted partly during exceptions
+ * @param set 
+ */
 void String_set::insert_all(String_set set)
 {
-    String_set_node* nodePtr;
-    nodePtr = set.parent;
-    while(nodePtr != nullptr){
-        insert(*nodePtr);
-        nodePtr = nodePtr->left_child;
+    std::vector<String> temp;
+    try{
+    traverse(set.parent, &temp);    //might throw, might have undefinded behavior
+    }catch(const std::exception& e){
+
+        }
+    for(int i = temp.size(); i>0; i--){
+        
+        insert(temp.at(i));         //might throw
+        
+        temp.pop_back();
     }
-    nodePtr = set.parent;
-    while(nodePtr != nullptr){
-        nodePtr = nodePtr->right_child;
-        insert(*nodePtr);
+    //destroy set set
+}
+
+/**
+ * @brief helper-function to traverse nodes and fill vector temp
+ * basic exception safety, no parameter of the current set gets manipulated
+ * @param nodePtr 
+ * @param temp 
+ */
+void String_set::traverse(String_set_node* nodePtr, std::vector<String>* temp)
+{
+    temp->push_back(nodePtr->nodesString);
+    if(nodePtr->left_child != nullptr){
+        traverse (nodePtr->left_child, temp);
+    }
+    if(nodePtr->right_child != nullptr){
+        traverse(nodePtr->right_child, temp);
     }
 }

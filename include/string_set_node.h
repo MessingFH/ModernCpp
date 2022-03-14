@@ -24,7 +24,7 @@ class String_set_node
         String_set_node();
         String_set_node(String s);
         // dtor
-        ~String_set_node();
+        ~String_set_node()noexcept;
         //cpy ctor
         String_set_node(const String_set_node& rhs);
         //move ctor

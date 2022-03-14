@@ -1,5 +1,6 @@
 //string_set_node.cpp
 #include <cstring>
+#include <algorithm> 
 #include "include/string_set_node.h"
 #include "include/string.h"
 
@@ -26,7 +27,7 @@ String_set_node::String_set_node(String s) : nodesString(s), left_child(nullptr)
  * @brief Destroy the String_set_node::String_set_node object
  * 
  */
-String_set_node::~String_set_node()
+String_set_node::~String_set_node()noexcept
 {
         
 }
@@ -36,7 +37,7 @@ String_set_node::~String_set_node()
  * 
  * @param rhs 
  */
-String_set_node::String_set_node(const String_set_node& rhs) 
+String_set_node::String_set_node(const String_set_node& rhs) : nodesString(rhs.nodesString), left_child(rhs.left_child), right_child(rhs.right_child)
 {
 
 }
@@ -51,12 +52,16 @@ String_set_node::String_set_node(const String_set_node& rhs)
  */
 String_set_node::String_set_node(String_set_node&& other)
 {
-
+    String* temp = &nodesString;
+    String* tempother = &other.nodesString;
+    std::swap(temp, tempother);
+    std::swap(left_child, other.left_child);
+    std::swap(right_child, other.right_child);
 }
 
 /**
  * @brief function to insert String into the node or call the next node to insert it
- * 
+ * Basic exception safety (strcmp might lead to unexpected behavior)
  * @param s 
  */
 void String_set_node::insert(String s)
@@ -81,7 +86,7 @@ void String_set_node::insert(String s)
 
 /**
  * @brief overloaded function to insert String_node into the node or call the next node to insert it
- * 
+ * Basic exception safety (strcmp might lead to unexpected behavior)
  * @param s 
  */
 void String_set_node::insert(String_set_node s)
@@ -106,7 +111,7 @@ void String_set_node::insert(String_set_node s)
 
 /**
  * @brief checks node for s, else checks child and returns child->find(s) or nullptr if no child
- * 
+ * Strong exception safety, as long as s is correct
  * @param s 
  * @return String 
  */

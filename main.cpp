@@ -1,6 +1,6 @@
 //main.cpp
 #include <iostream>
-
+#include <algorithm> 
 
 #include "include/string.h"
 #include "include/string_shared_ptr.h"
@@ -15,7 +15,9 @@
 // Copyright: Bjarne Messing, Daniel Mollenhauer, Jonas Schwerthelm
 // main.cpp
 
+
 using namespace std;
+
 
 
 int main () {

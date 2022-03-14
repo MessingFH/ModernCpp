@@ -27,19 +27,26 @@ String::String() noexcept : length(0)
         }
 
         std::cout << "User defined String constructor invoked." << std::endl; //Used as Debug
-        stringptr[0] = '\0';
+       
+        try{
+                stringptr[0] = '\0';    //-> might throw
+        }catch(const std::exception& e){
+                std::cout << "Error at Assignment in String-Constructor" << std::endl;
+        }
 }
 
 /**
  * @brief Construct a new overloaded String:: String object
- * Noexcept
+ * Basic Safety is guranteed -> undefined behaviour can occure f.e. regarding max_size at "stringptr[length+data_length] = \0"
+ * when data has a guranteed string termination
+ * a
  * @param data 
  */
 String::String(const char* data) noexcept : length(0)
 {
         std::cout << "User defined String-parameter constructor invoked." << std::endl; //Used as Debug
         if(data != NULL){
-                while (data[length] != '\0') length++;          //calculate length of given data
+                while (data[length] != '\0') length++;          //calculate length of given data -> migh
         }
         try{ 
                 stringptr = (char*)malloc(length);         //allocate memory
@@ -51,11 +58,15 @@ String::String(const char* data) noexcept : length(0)
                         << "\nLine: " << e.getLineNumber()
                         << "\nFile: " << e.getFile();
         }
-        for(int i = 0; i < length; i++)
-        {
-                stringptr[i] = data[i];            //fill allocated memory
+        try{
+                for(int i = 0; i < length; i++)
+                {
+                        stringptr[i] = data[i];            //fill allocated memory -> might throw
+                }
+                stringptr[length] = '\0';          //add stringptr termination -> might throw
+        }catch(const std::exception& e){
+                std::cout << "Error at Assignment in String-Constructor" << std::endl;
         }
-        stringptr[length] = '\0';          //add stringptr termination
 }
 
 /**
@@ -92,7 +103,7 @@ String::String(const String& rhs)
 
         for(int i = 0; i < length; i++)
         {
-                stringptr[i] = rhs.stringptr[i];            //fill allocated memory
+                stringptr[i] = rhs.stringptr[i];            //fill allocated memory might throw
         }
         stringptr[length] = '\0';
         std::cout << "User defined String copy constructor invoked." << std::endl; //Used as Debug for 2 c)
@@ -114,6 +125,7 @@ String::String(String&& other)
 /**
  * @brief Function to append further chars to the stringptr
  *        Basic Safety is guranteed -> undefined behaviour can occure f.e. regarding max_size at "stringptr[length+data_length] = \0"
+ * 
  * @param data 
  */
 void String::append(const char* data)
@@ -134,20 +146,23 @@ void String::append(const char* data)
                         << "\nLine: " << e.getLineNumber()
                         << "\nFile: " << e.getFile();
         }
-        
-        for(int i = 0; i < data_length; i++)
-        {
-                stringptr[length+i] = data[i];              //fill the reallocated memory
+        try{
+                for(int i = 0; i < data_length; i++)
+                {
+                        stringptr[length+i] = data[i];              //fill the reallocated memory -> might throw
+                }
+                
+                stringptr[length+data_length] = '\0';               //terminate stringptr - might throw
+        }catch(const std::exception& e){
+                std::cout << "Error at Assignment in String-clear" << std::endl;
         }
-        
-        stringptr[length+data_length] = '\0';               //terminate stringptr
         length += data_length;
 
 }
 
 /**
  * @brief Function to return the current stringptr data as pointer
- * 
+ * noexcept, while string is correctly initialized
  * @return char* 
  */
 char* String::data()
@@ -156,7 +171,7 @@ char* String::data()
 }
 
 /* Function to return the current stringptr data as const pointer
- * 
+ * noexcept, while string is correctly initialized
  */
 const char* String::data() const
 {
@@ -195,10 +210,10 @@ void String::print() const
  * @brief Function to clear the stringptr and reallocate memory
  * 
  */
-void String::clear() 
+void String::clear() noexcept
 {
         try{ 
-                stringptr = (char*)realloc (stringptr, 1*sizeof(char));
+                stringptr = (char*)realloc (stringptr, sizeof(char));
                 if (stringptr == NULL){
                         throw (Exception("Malloc in String-Clear failed", __FILE__, __LINE__));
                 }
@@ -208,9 +223,12 @@ void String::clear()
                         << "\nLine: " << e.getLineNumber()
                         << "\nFile: " << e.getFile();
         }
-        
-        stringptr[0] = '\0';
+        try{
+        stringptr[0] = '\0';    //both might throw
         length = 0;
+        }catch(const std::exception& e){
+                std::cout << "Error at Assignment in String-clear" << std::endl;
+        }
 }
 
 /**
@@ -227,7 +245,8 @@ String String::operator+ (String other) {
 
 /**
  * @brief Function to use operator [] for indexing
- * Strong gurantee
+ * If i is less or equal to the string length, the function never throws exceptions (no-throw guarantee).
+Otherwise, it causes undefined behavior.
  * @param i 
  * @return char& 
  */
@@ -242,16 +261,13 @@ char& String::operator[](int i) const
 
 /**
  * @brief 
- * 
+ * If i is less or equal to the string length, the function never throws exceptions (no-throw guarantee).
+Otherwise, it causes undefined behavior.
  * @param i 
  * @return const char& 
  */
-const char& String::operator[](int i)
+const char& String::operator[](int i) 
 {
-        if (i>length-2 || i<0 ){
-                throw std::invalid_argument("String-Operator [] index out of bounds");
-                return stringptr[0];       //return first element
-        }
         return stringptr[i];
 }
 
@@ -276,7 +292,7 @@ char& String::at(int i) const
  * @param i 
  * @return const char 
  */
-const char& String::at(int i) 
+const char& String::at(int i)
 {
         if (i>length-2 || i<0 ){
                 throw std::invalid_argument("String-Operator .at() index out of bounds");

@@ -3,6 +3,7 @@
 #ifndef __INCLUDED_MODERNCPP_STRING_SET_H__
 #define __INCLUDED_MODERNCPP_STRING_SET_H__
 
+#include <vector>
 // Autor(en): Bjarne Messing, Daniel Mollenhauer, Jonas Schwerthelm
 // Datum: 23.01.2022
 // Kontext: LeibnizFH, C++ 6. Semester, dEA2019
@@ -21,7 +22,7 @@ class String_set
         // ctor
         String_set();
         // dtor
-        ~String_set();
+        ~String_set()noexcept;
         //cpy ctor
         String_set(const String_set& rhs);
         //move ctor
@@ -32,7 +33,8 @@ class String_set
         void insert(String_set_node s);
         String find(String s);
         void insert_all (String_set set);
-        
+        void traverse (String_set_node* nodePtr, std::vector<String>* temp);
+
         /* Funtion to associate the -> operator with the dedicated String
         * 
         * Return: 

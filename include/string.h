@@ -35,12 +35,13 @@ class String
         const char* data() const;
         int find(char c) const;
         void print() const;
-        void clear();
+        void clear() noexcept;
         String operator+(String other);
     	char& operator[](int i) const;
         const char& operator[](int i);
         char& at(int i) const;
         const char& at(int i);
+        String& operator=(String& other);
 
 };
 
